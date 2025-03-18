@@ -1,11 +1,11 @@
 /*******************************************************************************
  *                                                                             *
  * Project: QtQmlTreeView Demo using a custom json to populate the tree        *
- * Filename: TreeModel.h                                                      *
+ * Filename: TreeModel.h                                                       *
  *                                                                             *
  * Description:                                                                *
- * Header file for TreeModel class, which inherits from QAbstractItemModel    *
- * This model manages a hierarchical tree structure of JSON data, using a     *
+ * Header file for TreeModel class, which inherits from QAbstractItemModel     *
+ * This model manages a hierarchical tree structure of JSON data, using a      *
  * TreeNode class for storage.                                                 *
  *                                                                             *
  * Author(s): Navi Singh                                                       *
@@ -19,6 +19,7 @@
  * the Free Software Foundation, either version 3 of the License, or           *
  * (at your option) any later version.                                         *
  *                                                                             *
+ *
  * QtQmlTreeView Demo is distributed in the hope that it will be useful,       *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of              *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
