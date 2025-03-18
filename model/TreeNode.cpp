@@ -45,7 +45,7 @@ QVariant TreeNode::data(int column) const
 int TreeNode::row() const
 {
     if (_parentItem) {
-        return _parentItem->_children.indexOf(const_cast<TreeNode *>(this));
+        return _parentItem->children().indexOf(const_cast<TreeNode *>(this));
     }
     return 0;
 }

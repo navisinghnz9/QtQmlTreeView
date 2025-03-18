@@ -104,7 +104,7 @@ public:
      *
      * @return A list of child nodes.
      */
-    inline QList<TreeNode *> children() const { return _children; }
+    inline QList<TreeNode *>& children() { return _children; }
 
     /**
      * @brief Returns the name of the node.
