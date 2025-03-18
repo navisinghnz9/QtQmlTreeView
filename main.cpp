@@ -48,7 +48,6 @@ void traverseJson(TreeNode* rootItem, QJsonObject &jsonObj) {
         QString name = it.key();
         TreeNode *obj = new TreeNode(name, rootItem);
         rootItem->children().append(obj);
-        qDebug() << "checking node: " << name;
 
         if (it.value().isString()) {
             QString value = it.value().toString();
