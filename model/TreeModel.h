@@ -1,10 +1,10 @@
 /*******************************************************************************
  *                                                                             *
  * Project: QtQmlTreeView Demo using a custom json to populate the tree        *
- * Filename: FruitModel.h                                                      *
+ * Filename: TreeModel.h                                                      *
  *                                                                             *
  * Description:                                                                *
- * Header file for FruitModel class, which inherits from QAbstractItemModel    *
+ * Header file for TreeModel class, which inherits from QAbstractItemModel    *
  * This model manages a hierarchical tree structure of fruit data, using a     *
  * TreeNode class for storage.                                                 *
  *                                                                             *
@@ -29,8 +29,8 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __FRUIT_MODEL_H__
-#define __FRUIT_MODEL_H__
+#ifndef __TREE_MODEL_H__
+#define __TREE_MODEL_H__
 
 #include <QAbstractItemModel>
 #include <QVariant>
@@ -38,12 +38,12 @@
 #include "TreeNode.h"
 
 
-class FruitModel : public QAbstractItemModel
+class TreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
     /**
-     * @brief Constructs the FruitModel with an optional parent object.
+     * @brief Constructs the TreeModel with an optional parent object.
      *
      * This constructor initializes the model and sets up the root item (TreeNode).
      * The model is used for managing a tree structure of fruit data, which can
@@ -51,7 +51,7 @@ public:
      *
      * @param parent The parent QObject, default is nullptr.
      */
-    explicit FruitModel(QObject *parent = nullptr);
+    explicit TreeModel(TreeNode *rootItem, QObject *parent = nullptr);
 
     /**
      * @brief Enum for custom roles used in the model.
@@ -150,4 +150,4 @@ private:
     TreeNode *_rootItem;
 };
 
-#endif // __FRUIT_MODEL_H__
+#endif // __TREE_MODEL_H__

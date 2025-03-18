@@ -45,7 +45,7 @@ ApplicationWindow {
 
         selectionModel: ItemSelectionModel {}
 
-        model: fruitModel
+        model: treeModel
 
         delegate: Item {
             implicitWidth: padding + label.x + label.implicitWidth + padding
