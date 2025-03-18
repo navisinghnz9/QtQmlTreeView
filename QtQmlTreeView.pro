@@ -27,3 +27,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     model/FruitModel.h \
     model/TreeNode.h
+
+DISTFILES += \
+    data/test.json
