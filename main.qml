@@ -108,6 +108,13 @@ ApplicationWindow {
                 width: parent.width - padding - x
                 clip: true
                 text: model.name
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        tf.text = model.name
+                    }
+                }
             }
         }
     }
