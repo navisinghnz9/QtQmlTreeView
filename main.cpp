@@ -63,7 +63,7 @@ void traverseJson(TreeNode* rootItem, QJsonObject &jsonObj) {
         }
 
         if (it.value().isDouble()) {
-            QString value = QString::number(it.value().toDouble()); // TODO - fix double conversion
+            QString value = QString::number(it.value().toDouble());
             obj->children().append(new TreeNode(value, obj));
             continue;
         }
