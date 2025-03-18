@@ -18,7 +18,7 @@ int TreeModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
-    // we have only one column (i.e. name of the fruit)
+    // we have only one column (i.e. name of the node)
     return 1;
 }
 

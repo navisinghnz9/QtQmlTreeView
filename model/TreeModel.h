@@ -5,7 +5,7 @@
  *                                                                             *
  * Description:                                                                *
  * Header file for TreeModel class, which inherits from QAbstractItemModel    *
- * This model manages a hierarchical tree structure of fruit data, using a     *
+ * This model manages a hierarchical tree structure of JSON data, using a     *
  * TreeNode class for storage.                                                 *
  *                                                                             *
  * Author(s): Navi Singh                                                       *
@@ -46,7 +46,7 @@ public:
      * @brief Constructs the TreeModel with an optional parent object.
      *
      * This constructor initializes the model and sets up the root item (TreeNode).
-     * The model is used for managing a tree structure of fruit data, which can
+     * The model is used for managing a tree structure of JSON data, which can
      * be displayed in views like QTreeView.
      *
      * @param parent The parent QObject, default is nullptr.
@@ -56,12 +56,12 @@ public:
     /**
      * @brief Enum for custom roles used in the model.
      *
-     * This enum defines the roles that are used to access fruit-related data
+     * This enum defines the roles that are used to access node's data
      * in the model. Currently, only `NameRole` is defined to access the name
-     * of the fruit or category.
+     * of the node or category.
      */
     enum Roles {
-        NameRole = Qt::UserRole + 1 ///< Custom role for accessing fruit names.
+        NameRole = Qt::UserRole + 1 ///< Custom role for accessing node names.
     };
 
     /**
@@ -81,7 +81,7 @@ public:
      *
      * This method is part of the QAbstractItemModel interface. It returns
      * the number of columns in the model. In this case, it's a single column
-     * representing the fruit names.
+     * representing the node names.
      *
      * @param parent The parent index (default is QModelIndex()).
      * @return The number of columns (in this case, 1).
@@ -93,7 +93,7 @@ public:
      *
      * This method is part of the QAbstractItemModel interface. It provides
      * the actual data for a given item (node) at the specified index and role.
-     * It uses the custom roles, like `NameRole`, to retrieve fruit name data.
+     * It uses the custom roles, like `NameRole`, to retrieve node name data.
      *
      * @param index The model index.
      * @param role The role that specifies what data to retrieve.
@@ -140,8 +140,8 @@ public:
     /**
      * @brief Sets up the data for the model, initializing the tree structure.
      *
-     * This method initializes the model with a predefined set of fruit categories
-     * and fruit items. The tree structure is built by adding child nodes to the
+     * This method initializes the model with a predefined set of data categories
+     * and child items. The tree structure is built by adding child nodes to the
      * root item.
      */
     void setupModelData();

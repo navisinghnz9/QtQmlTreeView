@@ -14,7 +14,7 @@ ApplicationWindow {
         y: margin
         width: 150
         height: 40
-        placeholderText: "Fruit name here..."
+        placeholderText: "Type name here"
         font.pixelSize: 16
         anchors.horizontalCenter: parent.horizontalCenter
         onTextChanged: {
