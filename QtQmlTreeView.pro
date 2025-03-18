@@ -30,5 +30,4 @@ HEADERS += \
     model/TreeModel.h \
     model/TreeNode.h
 
-DISTFILES += \
-    data/test.json
+DISTFILES +=

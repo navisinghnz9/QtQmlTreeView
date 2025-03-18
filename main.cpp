@@ -38,7 +38,7 @@ TreeNode* setupTreeModelData()
 
 TreeNode* setupJsonModelData() {
 
-    QFile jsonFile("/home/nav/navi/experiments/QtQmlTreeView/data/test.json");
+    QFile jsonFile(":/data/test.json");
     if (!jsonFile.open(QIODevice::ReadOnly)) {
         qDebug() << "failed to open json file";
         return nullptr; // FIXME later
