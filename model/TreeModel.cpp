@@ -30,6 +30,10 @@
  *                                                                             *
  ******************************************************************************/
 
+#include <QFile>
+#include <QJsonValue>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include "TreeModel.h"
 
 
@@ -56,8 +60,6 @@ int TreeModel::columnCount(const QModelIndex &parent) const
 
 QVariant TreeModel::data(const QModelIndex &index, int role) const
 {
-
-    qDebug() << "TreeModel::data - index: " << index << ", role: " << role;
     if (!index.isValid()) {
         return QVariant();
     }
@@ -122,4 +124,31 @@ QHash<int, QByteArray> TreeModel::roleNames() const
     return roles;
 }
 
+QJsonValue TreeModel::serializeTree(TreeNode* item) {
+    if (item->children().isEmpty()) {
+        // we reached the leaf node, now return its value
+        return QJsonValue::fromVariant(item->value());
+    }
 
+    QJsonObject jsonObject;
+    for (TreeNode* child : item->children()) {
+        // recursively serialize the tree for each child node
+        QString key = child->name();
+        jsonObject[key] = serializeTree(child);
+    }
+    return jsonObject;
+}
+
+QJsonDocument TreeModel::serializeTreeToJson() {
+    QJsonValue rootValue = serializeTree(_rootItem);
+    return QJsonDocument(rootValue.toObject());  // Convert the root object into a QJsonDocument
+}
+
+void TreeModel::saveToJsonFile(const QString& filePath) {
+    QJsonDocument doc = serializeTreeToJson();
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly)) {
+        file.write(doc.toJson());
+        file.close();
+    }
+}

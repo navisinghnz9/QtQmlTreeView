@@ -137,6 +137,48 @@ public:
      */
     QHash<int, QByteArray> roleNames() const override;
 
+    /**
+     * @brief Recursively serializes a tree structure into a QJsonValue.
+     *
+     * This function recursively serializes the tree structure rooted at the given `TreeNode*` item
+     * into a `QJsonValue`. The value can either be a `QJsonObject` if the node has children (e.g., an object or array),
+     * or a primitive JSON value (e.g., string, number, boolean) if the node is a leaf.
+     *
+     * @param item The root node of the tree to be serialized.
+     *
+     * @return A `QJsonValue` representing the serialized JSON structure of the tree.
+     * It can be either a `QJsonObject` or a primitive JSON value.
+     *
+     * @note This function does not modify the tree structure, it only serializes it.
+     */
+    QJsonValue serializeTree(TreeNode* item);
+
+    /**
+     * @brief Serializes the entire tree structure to a QJsonDocument.
+     *
+     * This function serializes the entire tree structure starting from the root node into a `QJsonDocument`.
+     * The resulting document can be written to a file or used for other purposes where a JSON format is required.
+     *
+     * @return A `QJsonDocument` containing the entire serialized tree structure.
+     * The document will represent the entire tree as a JSON object or array.
+     */
+    QJsonDocument serializeTreeToJson();
+
+    /**
+     * @brief Saves the tree structure to a JSON file at the specified file path.
+     *
+     * This function serializes the entire tree structure starting from the root node and saves it as a JSON file
+     * at the specified file path. The tree is serialized into a `QJsonDocument` and written to the file.
+     *
+     * @param filePath The path of the file where the tree structure will be saved. The path should include the file name and extension (e.g., "path/to/file.json").
+     *
+     * @return void
+     *
+     * @note If the file at the given path does not exist, it will be created. If the file already exists, it will be overwritten.
+     */
+    void saveToJsonFile(const QString& filePath);
+
+
 private:
     TreeNode *_rootItem;
 };
