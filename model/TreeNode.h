@@ -114,6 +114,13 @@ public:
     inline QString name() const { return _name; }
 
     /**
+     * @brief Returns the value assciated with the name of the node.
+     *
+     * @return The value of the node.
+     */
+    inline QString value() const { return _value; }
+
+    /**
      * @brief Returns the parent node of this TreeNode.
      *
      * @return The parent TreeNode.
@@ -123,6 +130,7 @@ public:
 private:
     QList<TreeNode *> _children;
     QString _name;
+    QString _value;
     TreeNode *_parentItem;
 };
 

@@ -1,3 +1,35 @@
+/*******************************************************************************
+ *                                                                             *
+ * Project: QtQmlTreeView Demo using a custom json to populate the tree        *
+ * Filename: TreeModel.cpp                                                     *
+ *                                                                             *
+ * Description:                                                                *
+ * Header file for TreeModel class, which inherits from QAbstractItemModel     *
+ * This model manages a hierarchical tree structure of JSON data, using a      *
+ * TreeNode class for storage.                                                 *
+ *                                                                             *
+ * Author(s): Navi Singh                                                       *
+ * License: GPL-3.0 License                                                    *
+ * Copyright (c) 2025 Navi Singh                                               *
+ *                                                                             *
+ * This file is part of QtQmlTreeView Demo.                                    *
+ *                                                                             *
+ * QtQmlTreeView Demo is free software: you can redistribute it and/or modify  *
+ * it under the terms of the GNU General Public License as published by        *
+ * the Free Software Foundation, either version 3 of the License, or           *
+ * (at your option) any later version.                                         *
+ *                                                                             *
+ *
+ * QtQmlTreeView Demo is distributed in the hope that it will be useful,       *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of              *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
+ * GNU General Public License for more details.                                *
+ *                                                                             *
+ * You should have received a copy of the GNU General Public License           *
+ * along with QtQmlTreeView Demo. If not, see <https://www.gnu.org/licenses/>. *
+ *                                                                             *
+ ******************************************************************************/
+
 #include "TreeModel.h"
 
 
@@ -32,6 +64,11 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     if (role == NameRole) {
         return item->name();
     }
+
+    if (role == NameRole) {
+        return item->value();
+    }
+
 
     return QVariant();
 }

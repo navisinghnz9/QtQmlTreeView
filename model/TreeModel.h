@@ -57,12 +57,11 @@ public:
     /**
      * @brief Enum for custom roles used in the model.
      *
-     * This enum defines the roles that are used to access node's data
-     * in the model. Currently, only `NameRole` is defined to access the name
-     * of the node or category.
+     * This enum defines the roles that are used to access node's data - name and value in the model.
      */
     enum Roles {
-        NameRole = Qt::UserRole + 1 ///< Custom role for accessing node names.
+        NameRole = Qt::UserRole + 1,   // role for accesing name of node
+        ValueRole                      // role for accesing value of the node
     };
 
     /**
