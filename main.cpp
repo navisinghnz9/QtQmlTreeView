@@ -127,8 +127,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    TreeModel TreeModel(setupJsonModelData());
-    engine.rootContext()->setContextProperty("treeModel", &TreeModel);
+    TreeModel treeModel(setupJsonModelData());
+    engine.rootContext()->setContextProperty("treeModel", &treeModel);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
