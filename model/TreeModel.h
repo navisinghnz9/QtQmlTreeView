@@ -46,13 +46,13 @@ public:
     /**
      * @brief Constructs the TreeModel with an optional parent object.
      *
-     * This constructor initializes the model and sets up the root item (TreeNode).
+     * This constructor initializes the model and sets up the root node (TreeNode).
      * The model is used for managing a tree structure of JSON data, which can
      * be displayed in views like QTreeView.
      *
      * @param parent The parent QObject, default is nullptr.
      */
-    explicit TreeModel(TreeNode *rootItem, QObject *parent = nullptr);
+    explicit TreeModel(TreeNode *rootNode, QObject *parent = nullptr);
 
     /**
      * @brief Enum for custom roles used in the model.
@@ -68,8 +68,8 @@ public:
      * @brief Returns the number of rows under a given parent index.
      *
      * This method is part of the QAbstractItemModel interface. It returns the
-     * number of child items under the given parent index. For a root item,
-     * it returns the number of top-level items.
+     * number of child nodes under the given parent index. For a root node,
+     * it returns the number of top-level nodes.
      *
      * @param parent The parent index (default is QModelIndex()).
      * @return The number of rows (child nodes) under the given parent.
@@ -92,7 +92,7 @@ public:
      * @brief Returns the data for a given index and role.
      *
      * This method is part of the QAbstractItemModel interface. It provides
-     * the actual data for a given item (node) at the specified index and role.
+     * the actual data for a given node at the specified index and role.
      * It uses the custom roles, like `NameRole`, to retrieve node name data.
      *
      * @param index The model index.
@@ -102,15 +102,15 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     /**
-     * @brief Returns the index of the item at the given row and column.
+     * @brief Returns the index of the node at the given row and column.
      *
      * This method is part of the QAbstractItemModel interface. It returns the
-     * index for the item at the specified row and column under the given parent.
+     * index for the node at the specified row and column under the given parent.
      *
      * @param row The row index.
      * @param column The column index.
      * @param parent The parent index (default is QModelIndex()).
-     * @return The model index for the specified item.
+     * @return The model index for the specified node.
      */
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
 
@@ -118,11 +118,11 @@ public:
      * @brief Returns the parent index of the specified index.
      *
      * This method is part of the QAbstractItemModel interface. It returns the
-     * parent index of the item at the specified index, allowing navigation
+     * parent index of the node at the specified index, allowing navigation
      * from child nodes back to the root or parent nodes.
      *
      * @param index The model index.
-     * @return The parent index of the specified item.
+     * @return The parent index of the specified node.
      */
     QModelIndex parent(const QModelIndex &index) const override;
 
@@ -140,18 +140,18 @@ public:
     /**
      * @brief Recursively serializes a tree structure into a QJsonValue.
      *
-     * This function recursively serializes the tree structure rooted at the given `TreeNode*` item
+     * This function recursively serializes the tree structure rooted at the given `TreeNode*`
      * into a `QJsonValue`. The value can either be a `QJsonObject` if the node has children (e.g., an object or array),
      * or a primitive JSON value (e.g., string, number, boolean) if the node is a leaf.
      *
-     * @param item The root node of the tree to be serialized.
+     * @param node The root node of the tree to be serialized.
      *
      * @return A `QJsonValue` representing the serialized JSON structure of the tree.
      * It can be either a `QJsonObject` or a primitive JSON value.
      *
      * @note This function does not modify the tree structure, it only serializes it.
      */
-    QJsonValue serializeTree(TreeNode* item);
+    QJsonValue serializeTree(TreeNode* node);
 
     /**
      * @brief Serializes the entire tree structure to a QJsonDocument.
@@ -178,9 +178,8 @@ public:
      */
     void saveToJsonFile(const QString& filePath);
 
-
 private:
-    TreeNode *_rootItem;
+    TreeNode *_rootNode;
 };
 
 #endif // __TREE_MODEL_H__

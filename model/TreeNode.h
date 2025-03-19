@@ -126,13 +126,13 @@ public:
      *
      * @return The parent TreeNode.
      */
-    inline TreeNode *parentItem() const { return _parentItem; }
+    inline TreeNode *parentNode() const { return _parentNode; }
 
 private:
     QList<TreeNode *> _children;
     QString _name;
     QVariant _value;
-    TreeNode *_parentItem;
+    TreeNode *_parentNode;
 };
 
 #endif // __TREE_NODE_H__

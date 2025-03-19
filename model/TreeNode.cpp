@@ -33,8 +33,8 @@
 
 TreeNode::TreeNode(const QString &name, const QVariant &value, TreeNode *parent)
     : _name{name},
-    _value{value},
-    _parentItem{parent} {}
+      _value{value},
+      _parentNode{parent} {}
 
 TreeNode::~TreeNode()
 {
@@ -76,10 +76,8 @@ QVariant TreeNode::data(int column) const
 
 int TreeNode::row() const
 {
-    if (_parentItem) {
-        return _parentItem->children().indexOf(const_cast<TreeNode *>(this));
+    if (_parentNode) {
+        return _parentNode->children().indexOf(const_cast<TreeNode *>(this));
     }
     return 0;
 }
-
-

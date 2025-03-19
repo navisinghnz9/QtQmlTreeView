@@ -36,14 +36,13 @@
 #include <QJsonDocument>
 #include "TreeModel.h"
 
-
-TreeModel::TreeModel(TreeNode *rootItem, QObject *parent) : QAbstractItemModel(parent), _rootItem(rootItem) {}
+TreeModel::TreeModel(TreeNode *rootNode, QObject *parent) : QAbstractItemModel(parent), _rootNode(rootNode) {}
 
 int TreeModel::rowCount(const QModelIndex &parent) const
 {
     int rowCount = 0;
     if (!parent.isValid()) {
-        rowCount = _rootItem->children().count();
+        rowCount = _rootNode->children().count();
     } else {
         rowCount = static_cast<TreeNode *>(parent.internalPointer())->children().count();
     }
@@ -53,8 +52,6 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 int TreeModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-
-    // we have only one column (i.e. name of the node)
     return 1;
 }
 
@@ -64,15 +61,14 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    TreeNode *item = static_cast<TreeNode *>(index.internalPointer());
+    TreeNode *node = static_cast<TreeNode *>(index.internalPointer());
     if (role == NameRole) {
-        return item->name();
+        return node->name();
     }
 
     if (role == ValueRole) {
-        return item->value();
+        return node->value();
     }
-
 
     return QVariant();
 }
@@ -83,14 +79,14 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
         return QModelIndex();
     }
 
-    TreeNode *parentItem;
+    TreeNode *parentNode;
     if (!parent.isValid()) {
-        parentItem = _rootItem;
+        parentNode = _rootNode;
     } else {
-        parentItem = static_cast<TreeNode *>(parent.internalPointer());
+        parentNode = static_cast<TreeNode *>(parent.internalPointer());
     }
 
-    TreeNode *childItem = parentItem->children().value(row);
+    TreeNode *childItem = parentNode->children().value(row);
     if (childItem) {
         return createIndex(row, column, childItem);
     }
@@ -105,12 +101,12 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
     }
 
     TreeNode *childItem = static_cast<TreeNode *>(index.internalPointer());
-    TreeNode *parentItem = childItem->parentItem();
-    if (parentItem == _rootItem) {
+    TreeNode *parentNode= childItem->parentNode();
+    if (parentNode == _rootNode) {
         return QModelIndex();
     }
 
-    return createIndex(parentItem->row(), 0, parentItem);
+    return createIndex(parentNode->row(), 0, parentNode);
 }
 
 QHash<int, QByteArray> TreeModel::roleNames() const
@@ -140,8 +136,8 @@ QJsonValue TreeModel::serializeTree(TreeNode* item) {
 }
 
 QJsonDocument TreeModel::serializeTreeToJson() {
-    QJsonValue rootValue = serializeTree(_rootItem);
-    return QJsonDocument(rootValue.toObject());  // Convert the root object into a QJsonDocument
+    QJsonValue rootValue = serializeTree(_rootNode);
+    return QJsonDocument(rootValue.toObject());
 }
 
 void TreeModel::saveToJsonFile(const QString& filePath) {
