@@ -112,7 +112,10 @@ ApplicationWindow {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        tf.text = model.name
+                        // we will only set the text for leaf nodes for editing
+                        if(!hasChildren) {
+                            tf.text = model.name
+                        }
                     }
                 }
             }
