@@ -137,15 +137,6 @@ public:
      */
     QHash<int, QByteArray> roleNames() const override;
 
-    /**
-     * @brief Sets up the data for the model, initializing the tree structure.
-     *
-     * This method initializes the model with a predefined set of data categories
-     * and child items. The tree structure is built by adding child nodes to the
-     * root item.
-     */
-    void setupModelData();
-
 private:
     TreeNode *_rootItem;
 };

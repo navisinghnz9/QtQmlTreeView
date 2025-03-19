@@ -8,66 +8,70 @@
 #include <QFile>
 #include "model/TreeModel.h"
 
+
 TreeNode* setupTreeModelData()
 {
-    TreeNode* _rootItem = new TreeNode("Fruits");
+    TreeNode* _rootItem = new TreeNode("Fruits", "");
 
     // adding citrus category with its child nodes
-    TreeNode *citrusCategory = new TreeNode("Citrus", _rootItem);
-    citrusCategory->children().append(new TreeNode("Apple", citrusCategory));
-    citrusCategory->children().append(new TreeNode("Orange", citrusCategory));
+    TreeNode *citrusCategory = new TreeNode("Citrus", "", _rootItem);
+    citrusCategory->children().append(new TreeNode("Apple", "", citrusCategory));
+    citrusCategory->children().append(new TreeNode("Orange", "", citrusCategory));
 
-    TreeNode* kiwiNode = new TreeNode("Kiwi", citrusCategory);
-    kiwiNode->children().append(new TreeNode("Type 1", kiwiNode));
-    kiwiNode->children().append(new TreeNode("Type 2", kiwiNode));
+    TreeNode* kiwiNode = new TreeNode("Kiwi", "", citrusCategory);
+    kiwiNode->children().append(new TreeNode("Type 1", "", kiwiNode));
+    kiwiNode->children().append(new TreeNode("Type 2", "", kiwiNode));
 
     citrusCategory->children().append(kiwiNode);
     _rootItem->children().append(citrusCategory);
 
     // adding berries category with its child nodes
-    TreeNode *berryCategory = new TreeNode("Berries", _rootItem);
-    berryCategory->children().append(new TreeNode("Strawberry", berryCategory));
-    berryCategory->children().append(new TreeNode("Blueberry", berryCategory));
-    berryCategory->children().append(new TreeNode("Raspberry", berryCategory));
+    TreeNode *berryCategory = new TreeNode("Berries", "", _rootItem);
+    berryCategory->children().append(new TreeNode("Strawberry", "", berryCategory));
+    berryCategory->children().append(new TreeNode("Blueberry", "", berryCategory));
+    berryCategory->children().append(new TreeNode("Raspberry", "", berryCategory));
     _rootItem->children().append(berryCategory);
 
     // adding drupes category with its child nodes
-    TreeNode *drupesCategory = new TreeNode("Drupes", _rootItem);
-    drupesCategory->children().append(new TreeNode("Plums", drupesCategory));
-    drupesCategory->children().append(new TreeNode("Peaches", drupesCategory));
-    drupesCategory->children().append(new TreeNode("Olives", drupesCategory));
+    TreeNode *drupesCategory = new TreeNode("Drupes", "", _rootItem);
+    drupesCategory->children().append(new TreeNode("Plums", "", drupesCategory));
+    drupesCategory->children().append(new TreeNode("Peaches", "", drupesCategory));
+    drupesCategory->children().append(new TreeNode("Olives", "", drupesCategory));
     _rootItem->children().append(drupesCategory);
 
     return _rootItem;
 }
+
 
 void traverseJson(TreeNode* rootItem, QJsonObject &jsonObj) {
 
     for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it)
     {
         QString name = it.key();
-        TreeNode *obj = new TreeNode(name, rootItem);
-        rootItem->children().append(obj);
+
 
         if (it.value().isString()) {
-            QString value = it.value().toString();
-            obj->children().append(new TreeNode(value, obj));
+            TreeNode *obj = new TreeNode(name, it.value().toString(), rootItem);
+            rootItem->children().append(obj);
             continue;
         }
 
         if (it.value().isBool()) {
-            QString value = QString::number(it.value().toBool());
-            obj->children().append(new TreeNode(value, obj));
+            TreeNode *obj = new TreeNode(name, it.value().toBool(), rootItem);
+            rootItem->children().append(obj);
             continue;
         }
 
         if (it.value().isDouble()) {
-            QString value = QString::number(it.value().toDouble());
-            obj->children().append(new TreeNode(value, obj));
+            TreeNode *obj = new TreeNode(name, it.value().toDouble(), rootItem);
+            rootItem->children().append(obj);
             continue;
         }
 
         if (it.value().isArray()) {
+            TreeNode *obj = new TreeNode(name, "", rootItem);
+            rootItem->children().append(obj);
+
             QJsonArray jsonArray = it.value().toArray();
             for (int i = 0; i < jsonArray.size(); ++i) {
                 QJsonValue value = jsonArray.at(i);
@@ -78,12 +82,18 @@ void traverseJson(TreeNode* rootItem, QJsonObject &jsonObj) {
         }
 
         if (it.value().isObject()) {
+            TreeNode *obj = new TreeNode(name, "-", rootItem); // FIXME value param
+            rootItem->children().append(obj);
+
             QJsonObject childObj = it.value().toObject();
             traverseJson(obj, childObj);
             continue;
         }
 
         if (it.value().isNull()) {
+            TreeNode *obj = new TreeNode(name, "", rootItem); // FIXME value param
+            rootItem->children().append(obj);
+
             qDebug() << "TODO - Need to handle null value for node: " << name;
         }
 
@@ -92,7 +102,7 @@ void traverseJson(TreeNode* rootItem, QJsonObject &jsonObj) {
 
 TreeNode* setupJsonModelData() {
 
-    TreeNode* rootItem = new TreeNode("Config");
+    TreeNode* rootItem = new TreeNode("Config", "");
 
     QFile jsonFile(":/data/test.json");
     if (!jsonFile.open(QIODevice::ReadOnly)) {

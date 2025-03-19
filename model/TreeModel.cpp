@@ -56,6 +56,8 @@ int TreeModel::columnCount(const QModelIndex &parent) const
 
 QVariant TreeModel::data(const QModelIndex &index, int role) const
 {
+
+    qDebug() << "TreeModel::data - index: " << index << ", role: " << role;
     if (!index.isValid()) {
         return QVariant();
     }
@@ -65,7 +67,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
         return item->name();
     }
 
-    if (role == NameRole) {
+    if (role == ValueRole) {
         return item->value();
     }
 
@@ -115,6 +117,7 @@ QHash<int, QByteArray> TreeModel::roleNames() const
 
     // mapping NameRole to the property "name"
     roles[NameRole] = "name";
+    roles[ValueRole] = "value";
 
     return roles;
 }

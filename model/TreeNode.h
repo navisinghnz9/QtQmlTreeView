@@ -42,10 +42,11 @@ public:
     /**
      * @brief Constructs a TreeNode with given data and optional parent node.
      *
-     * @param data The name of the node.
+     * @param name The name of the node.
+     * @param value The value of the node.
      * @param parentItem The parent node (defaults to nullptr for leaf nodes).
      */
-    explicit TreeNode(const QString &data, TreeNode *parentItem = nullptr);
+    explicit TreeNode(const QString &name, const QVariant &value, TreeNode *parentItem = nullptr);
 
     /**
      * @brief Destructor for the TreeNode class.
@@ -118,7 +119,7 @@ public:
      *
      * @return The value of the node.
      */
-    inline QString value() const { return _value; }
+    inline QVariant value() const { return _value; }
 
     /**
      * @brief Returns the parent node of this TreeNode.
@@ -130,7 +131,7 @@ public:
 private:
     QList<TreeNode *> _children;
     QString _name;
-    QString _value;
+    QVariant _value;
     TreeNode *_parentItem;
 };
 

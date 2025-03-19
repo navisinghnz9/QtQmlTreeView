@@ -31,13 +31,13 @@
 
 #include "TreeNode.h"
 
-TreeNode::TreeNode(const QString &data, TreeNode *parent)
-    : _name{data}
-    , _parentItem{parent} { }
+TreeNode::TreeNode(const QString &name, const QVariant &value, TreeNode *parent)
+    : _name{name},
+    _value{value},
+    _parentItem{parent} {}
 
 TreeNode::~TreeNode()
 {
-    _value = "V123";
     qDeleteAll(_children);
 }
 

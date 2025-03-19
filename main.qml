@@ -114,7 +114,7 @@ ApplicationWindow {
                     onClicked: {
                         // we will only set the text for leaf nodes for editing
                         if(!hasChildren) {
-                            tf.text = model.name
+                            tf.text = model.value
                         }
                     }
                 }
