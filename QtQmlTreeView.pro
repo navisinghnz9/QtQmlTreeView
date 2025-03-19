@@ -8,7 +8,6 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        model/JsonDataModel.cpp \
         model/TreeModel.cpp \
         model/TreeNode.cpp
 
@@ -26,7 +25,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    model/JsonDataModel.h \
     model/TreeModel.h \
     model/TreeNode.h
 
