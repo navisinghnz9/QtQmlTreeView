@@ -28,4 +28,7 @@ HEADERS += \
     model/TreeModel.h \
     model/TreeNode.h
 
-DISTFILES +=
+# Copying test.json JSON file to the build directory
+DISTFILES += data/test.json
+
+QMAKE_POST_LINK += cp $$PWD/data/test.json $$OUT_PWD/
