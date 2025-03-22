@@ -33,8 +33,12 @@
 #ifndef __TREE_MODEL_H__
 #define __TREE_MODEL_H__
 
-#include <QAbstractItemModel>
+#include <QFile>
 #include <QVariant>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QAbstractItemModel>
 
 #include "TreeNode.h"
 
@@ -53,7 +57,7 @@ public:
      *
      * @param parent The parent QObject, default is nullptr.
      */
-    explicit TreeModel(TreeNode *rootNode, QObject *parent = nullptr);
+    explicit TreeModel(const QString jsonFile);
 
     /**
      * @brief Enum for custom roles used in the model.
@@ -179,10 +183,91 @@ public:
      */
     void saveToJsonFile(const QString& filePath);
 
+    /**
+     * @brief Sets the data for a given index in the tree model.
+     *
+     * This function updates the value at the specified `index` in the model. It does
+     * not use the provided `role` argument since the function is primarily concerned
+     * with editing the value of the item at the given index.
+     *
+     * The data update triggers a `dataChanged` signal to notify any views that the data
+     * has been updated. Additionally, it saves the updated model state to a JSON file
+     * by calling the `saveToJsonFile` function.
+     *
+     * @param index The model index that identifies the item to modify.
+     * @param value The new value to set at the specified index.
+     * @param role The role for the data. This parameter is unused, but it is typically
+     *             provided for compatibility with the Qt framework.
+     *
+     * @return `true` if the data was successfully set, `false` if the index is invalid.
+     *
+     * @note The `role` parameter is not used in this implementation as we are directly
+     *       modifying the value at the given index. The `Qt::EditRole` is emitted by the
+     *       `dataChanged` signal for compatibility with Qt's model/view framework.
+     *
+     * @see saveToJsonFile
+     */
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
 private:
+
+    /**
+     * @brief Recursively traverses a JSON object and creates a tree structure of TreeNode objects.
+     *
+     * This function takes a JSON object and recursively traverses its contents to build
+     * a tree of `TreeNode` objects, starting from the given `rootNode`. It handles various
+     * data types in the JSON object, including strings, booleans, doubles, arrays, objects,
+     * and null values. The resulting tree structure is represented by `TreeNode` objects
+     * where each `TreeNode` corresponds to a key-value pair from the JSON object.
+     *
+     * The function processes each JSON element based on its type:
+     * - Strings are stored as values in the tree.
+     * - Booleans are stored as values in the tree.
+     * - Doubles are stored as values in the tree.
+     * - Arrays are represented as parent nodes with their elements recursively added as children.
+     * - Objects are represented as parent nodes with their key-value pairs added recursively as child nodes.
+     * - Null values are represented by a `TreeNode` with an empty string value.
+     *
+     * The function will output a warning if an "undefined" type is encountered in the JSON object.
+     *
+     * @param rootNode The root node of the tree to which new nodes will be appended.
+     * @param jsonObj The JSON object to be traversed.
+     *
+     * @note This function assumes that the `TreeNode` class can handle different data types
+     *       (e.g., string, bool, double) and supports hierarchical relationships between nodes.
+     *
+     * @warning Undefined types in the JSON object are logged as warnings.
+     *
+     * @see TreeNode
+     * */
+    void traverseJson(TreeNode* rootNode, QJsonObject &jsonObj);
+
+    /**
+     * @brief Sets up the tree model data from a JSON file.
+     *
+     * This function reads a JSON file, parses its content, and sets up the tree structure
+     * using `TreeNode` objects. It initializes the root node with the name "Config" and
+     * an empty value. It then reads the JSON file specified by the member variable `_jsonFile`,
+     * parses it into a `QJsonObject`, and recursively traverses the JSON structure to populate
+     * the tree model.
+     *
+     * If the JSON file cannot be opened, an error message is logged, and the root node
+     * with default values is returned. Otherwise, the function processes the JSON file
+     * and builds a hierarchical structure of `TreeNode` objects.
+     *
+     * @return A pointer to the root `TreeNode` representing the top-level structure of
+     *         the parsed JSON data.
+     *
+     * @note The `_jsonFile` member variable is expected to contain the path to a valid
+     *       JSON file.
+     *
+     * @see traverseJson
+     */
+    TreeNode* setupJsonModelData();
+
+private:
     TreeNode *_rootNode;
+    QString _jsonFile;
 };
 
 #endif // __TREE_MODEL_H__

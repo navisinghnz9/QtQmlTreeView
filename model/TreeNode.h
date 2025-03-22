@@ -121,8 +121,20 @@ public:
      */
     inline QVariant value() const { return _value; }
 
-
-    inline void setValue(QVariant value) { _value = value;};
+    /**
+     * @brief Sets the value of the node.
+     *
+     * This function sets the value of the current `TreeNode` to the provided `value`.
+     * The `value` can be of any type supported by `QVariant`, and it is stored in the
+     * private member variable `_value`. This method allows updating the value stored
+     * in the node.
+     *
+     * @param value The value to set for the current node. It can be any type that
+     *              `QVariant` supports (e.g., int, double, QString, etc.).
+     *
+     * @see QVariant
+     */
+    inline void setValue(QVariant value) { _value = value; }
 
     /**
      * @brief Returns the parent node of this TreeNode.

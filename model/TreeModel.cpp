@@ -36,7 +36,82 @@
 #include <QJsonDocument>
 #include "TreeModel.h"
 
-TreeModel::TreeModel(TreeNode *rootNode, QObject *parent) : QAbstractItemModel(parent), _rootNode(rootNode){}
+TreeModel::TreeModel(const QString jsonFile) : QAbstractItemModel(), _jsonFile(jsonFile){
+    _rootNode = setupJsonModelData();
+}
+
+void TreeModel::traverseJson(TreeNode* rootNode, QJsonObject &jsonObj) {
+
+    for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it)
+    {
+        QString name = it.key();
+
+        if (it.value().isString()) {
+            TreeNode *obj = new TreeNode(name, it.value().toString(), rootNode);
+            rootNode->children().append(obj);
+            continue;
+        }
+
+        if (it.value().isBool()) {
+            TreeNode *obj = new TreeNode(name, it.value().toBool(), rootNode);
+            rootNode->children().append(obj);
+            continue;
+        }
+
+        if (it.value().isDouble()) {
+            TreeNode *obj = new TreeNode(name, it.value().toDouble(), rootNode);
+            rootNode->children().append(obj);
+            continue;
+        }
+
+        if (it.value().isArray()) {
+            TreeNode *obj = new TreeNode(name, "", rootNode);
+            rootNode->children().append(obj);
+
+            QJsonArray jsonArray = it.value().toArray();
+            for (int i = 0; i < jsonArray.size(); ++i) {
+                QJsonValue value = jsonArray.at(i);
+                QJsonObject childObj = value.toObject();
+                traverseJson(obj, childObj);
+            }
+            continue;
+        }
+
+        if (it.value().isObject()) {
+            TreeNode *obj = new TreeNode(name, "", rootNode);
+            rootNode->children().append(obj);
+            QJsonObject childObj = it.value().toObject();
+            traverseJson(obj, childObj);
+            continue;
+        }
+
+        if (it.value().isNull()) {
+            TreeNode *obj = new TreeNode(name, "", rootNode);
+            rootNode->children().append(obj);
+        }
+
+        if(it.value().isUndefined()) {
+            qWarning() << "[WARNING] :: undefined type for node: " << name;
+        }
+    }
+}
+
+TreeNode* TreeModel::setupJsonModelData() {
+
+    TreeNode* rootNode = new TreeNode("Config", "");
+    QFile jsonFile(_jsonFile);
+
+    if (!jsonFile.open(QIODevice::ReadOnly)) {
+        qDebug() << "ERROR - failed to open json file";
+        return rootNode;
+    }
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonFile.readAll());
+    QJsonObject jsonObj = jsonDoc.object();
+    traverseJson(rootNode, jsonObj);
+
+    return rootNode;
+}
 
 int TreeModel::rowCount(const QModelIndex &parent) const
 {
@@ -157,7 +232,7 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
     if (index.isValid()) {
         node->setValue(value);
         emit dataChanged(index, index, {Qt::EditRole});
-        saveToJsonFile("./test.json");
+        saveToJsonFile(_jsonFile);
         return true;
     }
     return false;

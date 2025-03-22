@@ -1,10 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QFile>
 #include "model/TreeModel.h"
 
 // dummy data of some fruits nested in categories, prices and attributes
@@ -43,80 +39,6 @@ TreeNode* setupFruitsTreeModelData()
     return rootNode;
 }
 
-void traverseJson(TreeNode* rootNode, QJsonObject &jsonObj) {
-
-    for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it)
-    {
-        QString name = it.key();
-
-        if (it.value().isString()) {
-            TreeNode *obj = new TreeNode(name, it.value().toString(), rootNode);
-            rootNode->children().append(obj);
-            continue;
-        }
-
-        if (it.value().isBool()) {
-            TreeNode *obj = new TreeNode(name, it.value().toBool(), rootNode);
-            rootNode->children().append(obj);
-            continue;
-        }
-
-        if (it.value().isDouble()) {
-            TreeNode *obj = new TreeNode(name, it.value().toDouble(), rootNode);
-            rootNode->children().append(obj);
-            continue;
-        }
-
-        if (it.value().isArray()) {
-            TreeNode *obj = new TreeNode(name, "", rootNode);
-            rootNode->children().append(obj);
-
-            QJsonArray jsonArray = it.value().toArray();
-            for (int i = 0; i < jsonArray.size(); ++i) {
-                QJsonValue value = jsonArray.at(i);
-                QJsonObject childObj = value.toObject();
-                traverseJson(obj, childObj);
-            }
-            continue;
-        }
-
-        if (it.value().isObject()) {
-            TreeNode *obj = new TreeNode(name, "", rootNode);
-            rootNode->children().append(obj);
-
-            QJsonObject childObj = it.value().toObject();
-            traverseJson(obj, childObj);
-            continue;
-        }
-
-        if (it.value().isNull()) {
-            TreeNode *obj = new TreeNode(name, "", rootNode);
-            rootNode->children().append(obj);
-        }
-
-        if(it.value().isUndefined()) {
-            qWarning() << "[WARNING] :: undefined type for node: " << name;
-        }
-    }
-}
-
-TreeNode* setupJsonModelData() {
-
-    TreeNode* rootNode = new TreeNode("Config", "");
-    QFile jsonFile("./test.json");
-
-    if (!jsonFile.open(QIODevice::ReadOnly)) {
-        qDebug() << "ERROR - failed to open json file";
-        return rootNode;
-    }
-
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonFile.readAll());
-    QJsonObject jsonObj = jsonDoc.object();
-    traverseJson(rootNode, jsonObj);
-
-    return rootNode;
-}
-
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -126,7 +48,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    TreeModel treeModel(setupJsonModelData());
+    TreeModel treeModel("./test.json");
     engine.rootContext()->setContextProperty("treeModel", &treeModel);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
