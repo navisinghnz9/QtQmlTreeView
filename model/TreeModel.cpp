@@ -36,7 +36,7 @@
 #include <QJsonDocument>
 #include "TreeModel.h"
 
-TreeModel::TreeModel(TreeNode *rootNode, QObject *parent) : QAbstractItemModel(parent), _rootNode(rootNode) {}
+TreeModel::TreeModel(TreeNode *rootNode, QObject *parent) : QAbstractItemModel(parent), _rootNode(rootNode){}
 
 int TreeModel::rowCount(const QModelIndex &parent) const
 {
@@ -147,4 +147,18 @@ void TreeModel::saveToJsonFile(const QString& filePath) {
         file.write(doc.toJson());
         file.close();
     }
+}
+
+bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+    // we are not using role, as we are simply editing value at given index
+    Q_UNUSED(role);
+
+    TreeNode* node = static_cast<TreeNode*>(index.internalPointer());
+    if (index.isValid()) {
+        node->setValue(value);
+        emit dataChanged(index, index, {Qt::EditRole});
+        saveToJsonFile("./test.json");
+        return true;
+    }
+    return false;
 }

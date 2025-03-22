@@ -42,6 +42,7 @@
 class TreeModel : public QAbstractItemModel
 {
     Q_OBJECT
+
 public:
     /**
      * @brief Constructs the TreeModel with an optional parent object.
@@ -177,6 +178,8 @@ public:
      * @note If the file at the given path does not exist, it will be created. If the file already exists, it will be overwritten.
      */
     void saveToJsonFile(const QString& filePath);
+
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
 private:
     TreeNode *_rootNode;

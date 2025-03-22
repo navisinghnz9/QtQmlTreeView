@@ -121,6 +121,9 @@ public:
      */
     inline QVariant value() const { return _value; }
 
+
+    inline void setValue(QVariant value) { _value = value;};
+
     /**
      * @brief Returns the parent node of this TreeNode.
      *
