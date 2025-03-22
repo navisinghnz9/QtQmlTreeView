@@ -103,7 +103,8 @@ void traverseJson(TreeNode* rootNode, QJsonObject &jsonObj) {
 TreeNode* setupJsonModelData() {
 
     TreeNode* rootNode = new TreeNode("Config", "");
-    QFile jsonFile(":/data/test.json");
+    QFile jsonFile("./test.json");
+
     if (!jsonFile.open(QIODevice::ReadOnly)) {
         qDebug() << "ERROR - failed to open json file";
         return rootNode;
