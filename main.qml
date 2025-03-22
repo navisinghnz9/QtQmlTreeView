@@ -7,30 +7,55 @@ ApplicationWindow {
     height: 800
 
     property int margin: 10
+    property int _currentRow: -1
+    property int _currentCol: -1
+    property var _curValue
 
     TextField {
         id: tf
         x: margin
         y: margin
-        width: 150
+        width: 200
         height: 40
         placeholderText: "Type name here"
         font.pixelSize: 16
         anchors.horizontalCenter: parent.horizontalCenter
-        onTextChanged: {
-            console.log("Text changed: " + tf.text)
-        }
     }
 
     Button
     {
         y: tf.y
         x: tf.x + tf.width + margin
+
         width: 60
         height: 40
         text: "Save"
         onClicked: {
-            console.log("ToDo - save data later: " + tf.text);
+            if (_currentRow === -1 || _currentCol === -1) {
+                return;
+            }
+
+            // index of node to be edited
+            let editIndex = treeView.index(_currentRow, _currentCol)
+
+            if (typeof _curValue === "boolean") {
+                treeModel.setData(editIndex, tf.text.toLowerCase() === 'true' ? true : false, 1)
+                return;
+            }
+
+            if (typeof _curValue === "number") {
+                // checking for floating point or interger type
+                // NOTE - in QML, we use modulus operator to differentiate between number and float
+                if (_curValue % 1 !== 0) { // its float
+                    treeModel.setData(editIndex, parseFloat(tf.text), 1)
+                } else { // its number
+                    treeModel.setData(editIndex, parseInt(tf.text), 1)
+                }
+                return;
+            }
+
+            // we are defaulting to string type, we will handle more types later, if needed
+            treeModel.setData(editIndex, tf.text, 1)
         }
     }
 
@@ -115,6 +140,9 @@ ApplicationWindow {
                         // we will only set the text for leaf nodes for editing
                         if(!hasChildren) {
                             tf.text = model.value
+                            _currentRow = row
+                            _currentCol = column
+                            _curValue = model.value
                         }
                     }
                 }
