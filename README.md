@@ -7,3 +7,11 @@ QtQmlTreeView is a demo to rendering/managing a dynamic tree from JSON data with
 ## TreeView Created From Dynamic Context
 ![Alt text](docs/TreeViewDemo-2.png)
 
+
+## How to use the TreeModel
+
+Instantiate the tree model with given json file
+
+```
+    TreeModel treeModel("./test.json");
+```
