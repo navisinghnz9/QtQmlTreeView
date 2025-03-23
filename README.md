@@ -7,6 +7,9 @@ Instantiate the tree model with given json file
 
 ```
     TreeModel treeModel("./test.json");
+
+    // pass tree model to QML
+    engine.rootContext()->setContextProperty("treeModel", &treeModel);
 ```
 
 ## TreeView Create From JSON file
