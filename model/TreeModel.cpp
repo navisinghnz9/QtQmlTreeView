@@ -40,7 +40,7 @@ TreeModel::TreeModel(const QString jsonFile) : QAbstractItemModel(), _jsonFile(j
     _rootNode = setupJsonModelData();
 }
 
-void TreeModel::traverseJson(TreeNode* rootNode, QJsonObject &jsonObj) {
+void TreeModel::traverseJsonObject(TreeNode* rootNode, QJsonObject &jsonObj) {
 
     for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it)
     {
@@ -67,13 +67,8 @@ void TreeModel::traverseJson(TreeNode* rootNode, QJsonObject &jsonObj) {
         if (it.value().isArray()) {
             TreeNode *obj = new TreeNode(name, "", rootNode);
             rootNode->children().append(obj);
-
             QJsonArray jsonArray = it.value().toArray();
-            for (int i = 0; i < jsonArray.size(); ++i) {
-                QJsonValue value = jsonArray.at(i);
-                QJsonObject childObj = value.toObject();
-                traverseJson(obj, childObj);
-            }
+            traverseJsonArray(obj, jsonArray);
             continue;
         }
 
@@ -81,7 +76,7 @@ void TreeModel::traverseJson(TreeNode* rootNode, QJsonObject &jsonObj) {
             TreeNode *obj = new TreeNode(name, "", rootNode);
             rootNode->children().append(obj);
             QJsonObject childObj = it.value().toObject();
-            traverseJson(obj, childObj);
+            traverseJsonObject(obj, childObj);
             continue;
         }
 
@@ -93,6 +88,24 @@ void TreeModel::traverseJson(TreeNode* rootNode, QJsonObject &jsonObj) {
         if(it.value().isUndefined()) {
             qWarning() << "[WARNING] :: undefined type for node: " << name;
         }
+    }
+}
+
+void TreeModel::traverseJsonArray(TreeNode* obj, QJsonArray &jsonArray) {
+    for (int i = 0; i < jsonArray.size(); ++i) {
+        QJsonValue value = jsonArray.at(i);
+        if (value.isObject()) {
+            QJsonObject childObj = value.toObject();
+            traverseJsonObject(obj, childObj);
+            continue;
+        }
+
+        if (value.isArray()) {
+            // ToDo
+            continue;
+        }
+
+        obj->children().append(new TreeNode("", value, obj));
     }
 }
 
@@ -108,7 +121,7 @@ TreeNode* TreeModel::setupJsonModelData() {
 
     QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonFile.readAll());
     QJsonObject jsonObj = jsonDoc.object();
-    traverseJson(rootNode, jsonObj);
+    traverseJsonObject(rootNode, jsonObj);
 
     return rootNode;
 }

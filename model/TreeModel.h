@@ -240,7 +240,28 @@ private:
      *
      * @see TreeNode
      * */
-    void traverseJson(TreeNode* rootNode, QJsonObject &jsonObj);
+    void traverseJsonObject(TreeNode* rootNode, QJsonObject &jsonObj);
+
+    /**
+     * @brief Recursively traverses a JSON array and processes its elements.
+     *
+     * This function iterates over each element in a given `QJsonArray`. Depending on the type of each
+     * element, it either calls another function to handle nested objects or creates new `TreeNode` objects
+     * to represent non-object values (such as strings, numbers, booleans, etc.) and appends them as children
+     * of the provided `TreeNode` object.
+     *
+     * @param obj The parent `TreeNode` to which new nodes will be appended. The new nodes represent the
+     *            elements of the JSON array.
+     * @param jsonArray The `QJsonArray` to be traversed. It contains various elements that can be objects,
+     *                  arrays, or basic types.
+     *
+     * @note The function currently does not handle nested arrays (`value.isArray()` case). The code for
+     *       handling nested arrays needs to be implemented.
+     *
+     * @see TreeNode
+     * @see traverseJsonObject
+     */
+    void traverseJsonArray(TreeNode* rootNode, QJsonArray &jsonArray);
 
     /**
      * @brief Sets up the tree model data from a JSON file.
