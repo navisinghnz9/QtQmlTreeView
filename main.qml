@@ -132,7 +132,7 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width - padding - x
                 clip: true
-                text: model.name
+                text: model.name ? model.name : model.value
 
                 MouseArea {
                     anchors.fill: parent
